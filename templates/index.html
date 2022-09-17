@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block industry %}
+    <h1>{% block name %} Welcome to LeaderBoard {% endblock %}</h1>
+    {% for company in companies %}
+        <a href="{{ url_for('company', company_id=company['id']) }}">
+            <h2>{{ company['name'] }}</h2>
+        </a>
+        <span class="badge badge-primary">{{ company['created'] }}</span>
+        <a href="{{ url_for('edit', id=company['id']) }}">
+            <span class="badge badge-warning">Edit</span>
+        </a>
+        <hr>
+    {% endfor %}
+{% endblock %}
