@@ -16,5 +16,5 @@ CREATE TABLE consumptions (
     elecricity TEXT NOT NULL,
     water TEXT NOT NULL,
     co2 TEXT NOT NULL,
-    PRIMARY KEY (company_id, year)
+    PRIMARY KEY (company_id, year, month)
 );
