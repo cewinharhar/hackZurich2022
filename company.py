@@ -2,9 +2,13 @@
 # in the main class for each field i need to call a mthod for that 
 # specific field and sumarize into a dictionary
 
+# imports
+import sqlite3
+
 class Company:
     def __init__(self, name, electricity_usage, industry, 
                 year, water_consumption, co2_emitted, summary):
+        self.conn = sqlite3.connect("schema.sql")
         self.name = name
         self.elec = electricity_usage
         
@@ -13,7 +17,7 @@ class Company:
         self.industry = industry
         self.year = year
         self.summary = summary
-        
+
     # method for calculating the % energy reduced / increased
     def calc_difference(self, type, previous_val):
         if type == "electricity":
