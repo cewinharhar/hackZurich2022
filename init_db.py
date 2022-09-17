@@ -47,7 +47,7 @@ def initConsumptions():
         #increaseValue = 0.1
         for year in range(2000, 2023): 
             for month in range(1,13):
-                increaseValue = increaseValue + round(np.random.random(), 1) / 10
+                #increaseValue = increaseValue + round(np.random.random(), 1) / 10
 
                 electricity = round(10 + np.random.random() * np.random.choice([-1, 1, 1, 1]), 1)
                 water = round(5 + np.random.random() * np.random.choice([-1, 1, 1, 1]), 1)
