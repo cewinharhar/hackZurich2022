@@ -5,18 +5,8 @@ import pandas as pd
 import json
 import plotly
 import plotly.express as px
-
-def dict_factory(cursor, row):
-    d = {}
-    for idx, col in enumerate(cursor.description):
-        d[col[0]] = row[idx]
-    return d
-
-def get_db_connection():
-    conn = sqlite3.connect('database.db')
-    conn.row_factory = sqlite3.Row
-    #conn.row_factory = dict_factory
-    return conn
+from company import Company
+from db import get_db_connection, dict_factory
 
 def get_company(id):
     conn = get_db_connection()
@@ -61,8 +51,10 @@ def index():
 @app.route('/<int:company_id>')
 def company(company_id):
     company = get_company(company_id)
+    print(company)
+    c = Company(company['name'], company['id'], company['industry'], "aaaaa")
     consumptions = get_cosumptions(company_id)
-    #print(consumptions)
+    print(c)
     return render_template('company.html', company=company, consumptions=consumptions)
 
 @app.route('/create', methods=('GET', 'POST'))

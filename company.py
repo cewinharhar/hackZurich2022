@@ -3,7 +3,7 @@
 # specific field and sumarize into a dictionary
 
 # imports
-import sqlite3
+from db import get_db_connection, dict_factory
 
 class Company:
     def __init__(self, name, company_id, industry, summary):
@@ -29,7 +29,7 @@ class Company:
 
 
     def _get_electricity(self):
-        conn = sqlite3.connect("database.db")
+        conn = get_db_connection()
         curs = conn.cursor()
         results = curs.execute("SELECT electricity FROM consumptions WHERE company_id = ?",(self.id,))
         data = results.fetchall()
@@ -37,7 +37,7 @@ class Company:
         return data
 
     def _get_water(self):
-        conn = sqlite3.connect("database.db")
+        conn = get_db_connection()
         curs = conn.cursor()
         results = curs.execute("SELECT water FROM consumptions WHERE company_id = ?",(self.id,))
         data = results.fetchall()
@@ -45,7 +45,7 @@ class Company:
         return data
 
     def _get_co2(self):
-        conn = sqlite3.connect("database.db")
+        conn = get_db_connection()
         curs = conn.cursor()
         results = curs.execute("SELECT co2 FROM consumptions WHERE company_id = ?",(self.id,))
         data = results.fetchall()
@@ -53,7 +53,7 @@ class Company:
         return data
 
     def _get_year(self):
-        conn = sqlite3.connect("database.db")
+        conn = get_db_connection()
         curs = conn.cursor()
         results = curs.execute("SELECT year FROM consumptions WHERE company_id = ?",(self.id,))
         data = results.fetchall()
@@ -61,9 +61,22 @@ class Company:
         return data
 
     def _get_month(self):
-        conn = sqlite3.connect("database.db")
+        conn = get_db_connection()
         curs = conn.cursor()
         results = curs.execute("SELECT month FROM consumptions WHERE company_id = ?",(self.id,))
         data = results.fetchall()
         conn.close()
         return data
+
+    def __str__(self):
+        '''         for e in self.elec:
+            print(e)
+        for e in self.water:
+            print(e)
+        for e in self.co2:
+            print(e)
+        for e in self.year:
+            print(e)
+        for e in self.month:
+            print(e) '''
+        return self.name

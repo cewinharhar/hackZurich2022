@@ -6,8 +6,8 @@ import sqlite3
 
 connection = sqlite3.connect('database.db')
 
-with open('schema.sql') as f:
-    connection.executescript(f.read())
+''' with open('schema.sql') as f:
+    connection.executescript(f.read()) '''
 
 cur = connection.cursor()
 
@@ -26,6 +26,10 @@ def initDbDataGenerator():
 
                 data.append([company, year, month, electricity, water, co2])
 
-    cur.execute("INSERT INTO consumptions (company_id, year, month, electricity, water, co2) VALUES (?, ?, ?, ?, ?, ?)",
-            (company, year, month, electricity, water, co2))
+                cur.execute("INSERT INTO consumptions (company_id, year, month, electricity, water, co2) VALUES (?, ?, ?, ?, ?, ?)",
+                        (company, year, month, electricity, water, co2))
                         
+    connection.commit()
+    connection.close()
+    
+initDbDataGenerator()
