@@ -42,7 +42,6 @@ def initCompany():
 
 def initConsumptions():
     cur = connection.cursor()
-    data = []
     for company in range(11): 
         #increaseValue = 0.1
         for year in range(2000, 2023): 
@@ -52,9 +51,6 @@ def initConsumptions():
                 electricity = round(10 + round(np.random.random(), 2) * np.random.choice([-1, 1, 1, 1]), 1)
                 water = round(5 + round(np.random.random(), 2) * np.random.choice([-1, 1, 1, 1]), 1)
                 co2 = round(3 + round(np.random.random(), 2) * np.random.choice([-1, 1, 1, 1]), 1)
-
-
-                data.append([company, year, month, electricity, water, co2])
 
                 cur.execute("INSERT INTO consumptions (company_id, year, month, electricity, water, co2) VALUES (?, ?, ?, ?, ?, ?)",
                         (company, year, month, electricity, water, co2))
