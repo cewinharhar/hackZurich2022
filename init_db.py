@@ -38,7 +38,6 @@ def initCompany():
     cur.execute("INSERT INTO company (name, industry, summary) VALUES (?, ?, ?)",
                 ('Zurich ', 'Insurance', 'Zurich is a leading multi-line insurer that serves its customers in global and local markets. With about 56,000 employees, it provides a wide range of property and casualty, life insurance products and services in more than 210 countries and territories. Zurichs customers include individuals, small businesses, and mid-sized and large companies, as well as multinational corporations.'))
 
-
     connection.commit()
 
 def initConsumptions():
