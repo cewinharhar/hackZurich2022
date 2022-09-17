@@ -1,10 +1,9 @@
 # class with all the fields of the company
 # add a short summary of the company
 class Company:
-    def __init__(self, name, electricity_usage_current, electricity_usage_previous, industry, year):
+    def __init__(self, name, electricity_usage_current, industry, year):
         self.name = name
         self.elec_current = electricity_usage_current
-        
         self.electricy_usage_per_year = {}
         self.industry = industry
         self.year = year
