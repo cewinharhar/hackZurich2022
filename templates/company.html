@@ -2,12 +2,13 @@
 
 {% block industry %}
     <h2>{% block name %} {{ company['name'] }} {% endblock %}</h2>
+    <p><b>Industry:</b> {{ company['industry'] }}</p>
+    <p><b>Summary:</b> {{ company['summary'] }}</p>
     {% for consumption in consumptions %}
-        <p>Date: {{ consumption['year']}}/{{ consumption['month']}}</p>
-        <p>Electricity: {{ consumption['electricity']}}</p>
-        <p>Water: {{ consumption['water']}}</p>
-        <p>CO2: {{ consumption['co2']}}</p>
+        <p><b>Date:</b> {{ consumption['year']}}/{{ consumption['month']}}</p>
+        <p><b>Electricity:</b> {{ consumption['electricity']}}</p>
+        <p><b>Water:</b> {{ consumption['water']}}</p>
+        <p><b>CO2:</b> {{ consumption['co2']}}</p>
     {% endfor %}
     <span class="badge badge-primary">{{ company['created'] }}</span>
-    <p>{{ company['industry'] }}</p>
 {% endblock %}

@@ -1,30 +1,10 @@
-import sqlite3
 from flask import Flask, render_template, request, url_for, flash, redirect
-from werkzeug.exceptions import abort
 import pandas as pd
 import json
 import plotly
 import plotly.express as px
 from company import Company
-from db import get_db_connection, dict_factory
-
-def get_company(id):
-    conn = get_db_connection()
-    company = conn.execute('SELECT * FROM company WHERE id = ?',
-                        (id,)).fetchone()
-    conn.close()
-    if company is None:
-        abort(404)
-    return company
-
-def get_cosumptions(company_id):
-    conn = get_db_connection()
-    consumptions = conn.execute('SELECT * FROM consumptions WHERE company_id = ?',
-                        (company_id,)).fetchall()
-    conn.close()
-    if company is None:
-        abort(404)
-    return consumptions
+from db import get_db_connection, get_company, get_consumptions 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your secret key'
@@ -43,7 +23,7 @@ def index():
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     d = []
     for company in companies:
-        consumptions = get_cosumptions(company['id'])
+        consumptions = get_consumptions(company['id'])
         d.append({"company":company, "consumptions":consumptions})
     conn.close() 
     return render_template('index.html', d=d, graphJSON=graphJSON)
@@ -53,7 +33,7 @@ def company(company_id):
     company = get_company(company_id)
     print(company)
     c = Company(company['name'], company['id'], company['industry'], "aaaaa")
-    consumptions = get_cosumptions(company_id)
+    consumptions = get_consumptions(company_id)
     print(c)
     return render_template('company.html', company=company, consumptions=consumptions)
 

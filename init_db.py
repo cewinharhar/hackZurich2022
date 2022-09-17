@@ -1,65 +1,43 @@
 import sqlite3
+import numpy as np
 
 connection = sqlite3.connect('database.db')
-
 
 with open('schema.sql') as f:
     connection.executescript(f.read())
 
-cur = connection.cursor()
+def initCompany():
+    cur = connection.cursor()
+    cnames = ['Novartis', 'Zühlke']
+    cindustries = ['Pharma', 'IT'] 
+    for c in range(6):
+        cur.execute("INSERT INTO company (name, industry, summary) VALUES (?, ?, ?)", 
+                    ('Novartis', 'Industry X', 'Descriptio cation when wher summary xy the company did'))
+        cur.execute("INSERT INTO company (name, industry, summary) VALUES (?, ?, ?)",
+            ('Zühlke', 'Industry Y', 'Descriptio cation when wher summary xy the company did'))
+    connection.commit()
 
-cur.execute("INSERT INTO company (name, industry) VALUES (?, ?)",
-            ('Novartis', 'Industry X')
-            )
+def initConsumptions():
+    cur = connection.cursor()
+    data = []
+    for company in range(11): 
+        increaseValue = 0.1
+        for year in range(2000, 2021): 
+            for month in range(13):
+                increaseValue = increaseValue + round(np.random.random(), 1) / 10
 
-cur.execute("INSERT INTO company (name, industry) VALUES (?, ?)",
-            ('Zühlke', 'Industry Y')
-            )
+                electricity = round(10 + increaseValue + np.random.choice([-1, 1, 1, 1]), 1)
+                water = round(5 + increaseValue + np.random.choice([-1, 1, 1, 1]), 1)
+                co2 = round(3 + increaseValue + np.random.choice([-1, 1, 1, 1, 1, 1]), 1)
 
-cur.execute("INSERT INTO company (name, industry) VALUES (?, ?)",
-            ('Novartis', 'Industry X')
-            )
 
-cur.execute("INSERT INTO company (name, industry) VALUES (?, ?)",
-            ('Zühlke', 'Industry Y')
-            )
+                data.append([company, year, month, electricity, water, co2])
 
-cur.execute("INSERT INTO company (name, industry) VALUES (?, ?)",
-            ('Novartis', 'Industry X')
-            )
+                cur.execute("INSERT INTO consumptions (company_id, year, month, electricity, water, co2) VALUES (?, ?, ?, ?, ?, ?)",
+                        (company, year, month, electricity, water, co2))
+    connection.commit()
 
-cur.execute("INSERT INTO company (name, industry) VALUES (?, ?)",
-            ('Zühlke', 'Industry Y')
-            )
+initCompany()
+initConsumptions()
 
-cur.execute("INSERT INTO company (name, industry) VALUES (?, ?)",
-            ('Novartis', 'Industry X')
-            )
-
-cur.execute("INSERT INTO company (name, industry) VALUES (?, ?)",
-            ('Zühlke', 'Industry Y')
-            )
-
-cur.execute("INSERT INTO company (name, industry) VALUES (?, ?)",
-            ('Novartis', 'Industry X')
-            )
-
-cur.execute("INSERT INTO company (name, industry) VALUES (?, ?)",
-            ('Zühlke', 'Industry Y')
-            )
-
-''' cur.execute("INSERT INTO consumptions (company_id, year, month, electricity, water, co2) VALUES (?, ?, ?, ?, ?, ?)",
-            ('1', '2020', '12', '453', '234', '11')
-            )
-
-cur.execute("INSERT INTO consumptions (company_id, year, month, electricity, water, co2) VALUES (?, ?, ?, ?, ?, ?)",
-            ('1', '2020', '11', '4533', '4', '10')
-            )
-cur.execute("INSERT INTO consumptions (company_id, year, month, electricity, water, co2) VALUES (?, ?, ?, ?, ?, ?)",
-            ('1', '2020', '10', '43', '2134', '121')
-            )
-cur.execute("INSERT INTO consumptions (company_id, year, month, electricity, water, co2) VALUES (?, ?, ?, ?, ?, ?)",
-            ('1', '2020', '9', '4533', '34', '111') 
-            )'''
-connection.commit()
 connection.close()
