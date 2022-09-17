@@ -1,5 +1,7 @@
 # class with all the fields of the company
-# add a short summary of the company
+# in the main class for each field i need to call a mthod for that 
+# specific field and sumarize into a dictionary
+
 class Company:
     def __init__(self, name, electricity_usage, industry, 
                 year, water_consumption, co2_emitted, summary):
@@ -11,8 +13,7 @@ class Company:
         self.industry = industry
         self.year = year
         self.summary = summary
-        self.usage = self._add_usage()
-
+        
     # method for calculating the % energy reduced / increased
     def calc_difference(self, type, previous_val):
         if type == "electricity":
