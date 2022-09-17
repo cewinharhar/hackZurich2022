@@ -11,7 +11,6 @@ class Company:
         self.industry = industry
         self.year = year
         self.summary = summary
-        self.usage = self._add_usage()
 
     # method for calculating the % energy reduced / increased
     def calc_difference(self, type, previous_val):
