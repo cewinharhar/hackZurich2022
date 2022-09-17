@@ -9,9 +9,25 @@ with open('schema.sql') as f:
 def initCompany():
     cur = connection.cursor()
     cur.execute("INSERT INTO company (name, industry, summary) VALUES (?, ?, ?)", 
-                ('Novartis', 'Industry X', 'Descriptio cation when wher summary xy the company did'))
+                ('Novartis', 'Pharmaceutical', ', Novartis is an international leader in the development and marketing of pharmaceuticals and nutrition products, in addition to operating a number of research institutes dedicated to the study of gene therapy.'))
+
     cur.execute("INSERT INTO company (name, industry, summary) VALUES (?, ?, ?)",
-        ('Zühlke', 'Industry Y', 'Descriptio cation when wher summary xy the company did'))
+                ('Zühlke', 'Software & Tech Services', 'Zühlke is a global innovation service provider. They envisage ideas and create new business models for clients by developing services and products based on new technologies – from the initial vision through development to deployment, production and operation. They specialise in strategy and business innovation, digital solutions and application services – in addition to device and systems engineering.))
+
+    cur.execute("INSERT INTO company (name, industry, summary) VALUES (?, ?, ?)",
+                ('ABB', 'Electrical Equipment & Parts', 'ABB Limited provides power and automation technologies. The Company operates under segments that include power products, power systems, automation products, process automation, and robotics.'))
+
+    cur.execute("INSERT INTO company (name, industry, summary) VALUES (?, ?, ?)",
+                ('Migros', 'Retail', 'ABB Limited provides power and automation technologies. The Company operates under segments that include power products, power systems, automation products, process automation, and robotics.'))
+
+    cur.execute("INSERT INTO company (name, industry, summary) VALUES (?, ?, ?)",
+                ('Swiss Re', 'Retail', 'ABB Limited provides power and automation technologies. The Company operates under segments that include power products, power systems, automation products, process automation, and robotics.'))
+
+    cur.execute("INSERT INTO company (name, industry, summary) VALUES (?, ?, ?)",
+                ('Migros', 'Retail', 'ABB Limited provides power and automation technologies. The Company operates under segments that include power products, power systems, automation products, process automation, and robotics.'))
+
+
+
     connection.commit()
 
 def initConsumptions():
@@ -19,7 +35,7 @@ def initConsumptions():
     data = []
     for company in range(11): 
         increaseValue = 0.1
-        for year in range(2000, 2021): 
+        for year in range(2001, 2023): 
             for month in range(13):
                 increaseValue = increaseValue + round(np.random.random(), 1) / 10
 
