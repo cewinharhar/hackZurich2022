@@ -14,8 +14,8 @@ CREATE TABLE consumptions (
     company_id INTEGER NOT NULL,
     year INTEGER NOT NULL,
     month INTEGER NOT NULL,
-    electricity TEXT NOT NULL,
-    water TEXT NOT NULL,
-    co2 TEXT NOT NULL,
+    electricity FLOAT NOT NULL,
+    water FLOAT NOT NULL,
+    co2 FLOAT NOT NULL,
     PRIMARY KEY (company_id, year, month)
 );

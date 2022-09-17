@@ -69,7 +69,8 @@ def company(company_id):
         domain = {'x': [0, 1], 'y': [0, 1]},
         title = {'text': "Speed"}))
     print(df)
-    fig2 = px.bar(df, x='Months', y='Electricity Consumption')
+    fig2 = px.bar(df, x='Months', y='Electricity Consumption', title="Monthly Energy consumption in MegaJoule (MJ)")
+    fig2.update_yaxes(range=[8,14])
     graphJSON2 = json.dumps(fig2, cls=plotly.utils.PlotlyJSONEncoder)
     graphJSON3 = json.dumps(fig3, cls=plotly.utils.PlotlyJSONEncoder)
     #print(c)
