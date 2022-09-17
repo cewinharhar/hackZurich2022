@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block industry %}
+    <h2>{% block name %} {{ company['name'] }} {% endblock %}</h2>
+    <p>Electricity supply: EWZ</p>
+    <span class="badge badge-primary">{{ company['created'] }}</span>
+    <p>{{ company['industry'] }}</p>
+{% endblock %}
