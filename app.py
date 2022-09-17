@@ -133,17 +133,6 @@ mars14      = ["P02768", "P02671", "P01009", "P02787", "P01024", "P01023", "P026
 sepromix20  = ['P02768', 'P02647', 'P02787', 'P00738', 'P02675', 'P01009', 'P01023', 'P02671', 'P02679', 'P01024', 'P02763', 'P00450', 'P0C0L4', 'P00747', 'P04114', 'P02747', 'P02745', 'P02746', 'P02766', 'P0C0L5']
 
 
-#============================================   Dictionairs     ==========================================================#
-
-
-
-#============================================   Functions   ==========================================================#
-
-
-
-#============================================   Web-App Layout    ==========================================================#
-
-#-----------------------------------------            Sidebar                ------------------------------------------------# 
 
 
 #-----------------------------------------            Navigation bar (top)               ------------------------------------------------# 
@@ -163,8 +152,6 @@ navbar =  dbc.Container(fluid=True, children=[
         html.Br()
         ])
 
-testBsp = """ Dear mr X \n How much is the price of product Y"""
-testBsp2 = """ Dear mr A \n thank you for your mail \n the price is 500 CHF without shipping"""
 #-----------------------------------------            WebApp Content                ------------------------------------------------# 
 content =  dbc.Container(children=[  #<container>
                     html.H2(subtitle, style={
@@ -174,13 +161,32 @@ content =  dbc.Container(children=[  #<container>
                                 'border-radius': 7.5,
                                 "margin":"auto"}),
                     dbc.Row(children=[
-                        dbc.Col(
-                            dcc.Textarea(id="test", value=testBsp, style={'width': '100%', 'height': 200})
+                        html.Div(
+                            dbc.Container(
+                                [
+                                    html.H1("Jumbotron", className="display-3"),
+                                    html.P(
+                                        "Use Containers to create a jumbotron to call attention to "
+                                        "featured content or information.",
+                                        className="lead",
+                                    ),
+                                    html.Hr(className="my-2"),
+                                    html.P(
+                                        "Use utility classes for typography and spacing to suit the "
+                                        "larger container."
+                                    ),
+                                    html.P(
+                                        dbc.Button("Learn more", color="primary"), className="lead"
+                                    ),
+                                ],
+                                fluid=True,
+                                className="py-3",
                             ),
-                        dbc.Col(
-                            dcc.Textarea(id="test2", value=testBsp2, style={'width': '100%', 'height': 200})
-                            ),
+                            className="p-3 bg-light rounded-3",
+                        )
                     ]),
+
+
                     ], fluid=False, id="page-content", style=CONTENT_STYLE
                     ) #</container>
 
