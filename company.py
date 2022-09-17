@@ -82,7 +82,7 @@ class Company:
     def _get_industries(self):
         conn = get_db_connection()
         curs = conn.cursor()
-        results = curs.execute("SELECT DISTINCT id, industry FROM company")
+        results = curs.execute("SELECT id, industry FROM company")
         data = results.fetchall()
         conn.close()
         return data
@@ -94,7 +94,3 @@ class Company:
         prev_month, prev_value, curr_month, co2 = get_values(self.data, year, month, type = "co2")
         return (0.75 * float(elec) + 0.125 * float(water) + 0.125* float(co2))
     
-c = Company("sbb", 0, "Retail", "foo")
-
-final = c._create_summed_scores()
-print(final)
