@@ -6,34 +6,69 @@
 import sqlite3
 
 class Company:
-    def __init__(self, name, electricity_usage, industry, 
-                year, water_consumption, co2_emitted, summary):
-        self.conn = sqlite3.connect("schema.sql")
+    def __init__(self, name, company_id, industry, summary):
+
+        # initalize the class with:
         self.name = name
-        self.elec = electricity_usage
-        
-        self.water = water_consumption
-        self.co2 = co2_emitted
         self.industry = industry
-        self.year = year
+        self.id = company_id
         self.summary = summary
 
-    # method for calculating the % energy reduced / increased
-    def calc_difference(self, type, previous_val):
-        if type == "electricity":
-            return (((self.elec - previous_val)/previous_val)*100)
-        if type == "water":
-            return (((self.water - previous_val)/previous_val)*100)
-        if type == "co2":
-            return (((self.co2 - previous_val)/previous_val)*100)
+        # fetch from database:
 
-    # method for adding the current electricity to the current year
-    def _add_usage(self):
-        return { self.year:{"elec": self.elec, "water": self.water, "co2": self.co2}}
-    
+        self.elec = self._get_electricity()
+        
+        self.water = self._get_water()
 
-comp = Company("sbb", 1000, "train", 2022, 2000, 53, "man we like trains, foo, bar, bazzz")
+        self.co2 = self._get_co2()
+        
+        self.year =self._get_year()
+
+        self.month = self._get_month()
+        
 
 
+    def _get_electricity(self):
+        conn = sqlite3.connect("database.db")
+        curs = conn.cursor()
+        results = curs.execute("SELECT electricity FROM consumptions WHERE company_id == self.id")
+        data = results.fetchall()
+        conn.close()
+        return data
+
+    def _get_water(self):
+        conn = sqlite3.connect("database.db")
+        curs = conn.cursor()
+        results = curs.execute("SELECT water FROM consumptions WHERE company_id == self.id")
+        data = results.fetchall()
+        conn.close()
+        return data
+
+    def _get_co2(self):
+        conn = sqlite3.connect("database.db")
+        curs = conn.cursor()
+        results = curs.execute("SELECT co2 FROM consumptions WHERE company_id == self.id")
+        data = results.fetchall()
+        conn.close()
+        return data
+
+    def _get_year(self):
+        conn = sqlite3.connect("database.db")
+        curs = conn.cursor()
+        results = curs.execute("SELECT year FROM consumptions WHERE company_id == self.id")
+        data = results.fetchall()
+        conn.close()
+        return data
+
+    def _get_month(self):
+        conn = sqlite3.connect("database.db")
+        curs = conn.cursor()
+        results = curs.execute("SELECT month FROM consumptions WHERE company_id == self.id")
+        data = results.fetchall()
+        conn.close()
+        return data
 
 
+c = Company("sbb", 1, "health", "foo bar baz")
+
+print(c.elec)
