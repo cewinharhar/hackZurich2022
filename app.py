@@ -5,7 +5,7 @@ import plotly
 import plotly.express as px
 import plotly.offline as pyo
 from company import Company
-from db import get_db_connection, get_company, get_consumptions 
+from db import *
 import plotly.graph_objects as go
 from utils import *
 import numpy as np
@@ -55,22 +55,25 @@ def company(company_id):
     #print(company)
     c = Company(company['name'], company['id'], company['industry'], company['summary'])
     consumptions = c.data
+    last_month, last_year = get_last_date()
     print(c)
     for yearlydata in consumptions:
         #print(yearlydata)
         for year in yearlydata:
-            if(year == '2022'):
+            if(year == str(last_year)):
                 months = []
                 electricity = []
                 for monthlydata in yearlydata[year]:
                     #print(monthlydata)
                     months.append(monthlydata['month'])
                     electricity.append(monthlydata['electricity'])
+    print(months)
+    print(electricity)
     df = pd.DataFrame({
             'Electricity Consumption': electricity,
-            'Months': ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            'Months': MONTHS[:last_month],
         })
-    elecBarPlot = px.bar(df, x='Months', y='Electricity Consumption', title="Monthly Energy consumption in MegaJoule (MJ)", range_y =[800,1400])
+    elecBarPlot = px.bar(df, x='Months', y='Electricity Consumption', title="Monthly Energy consumption in MegaJoule (MJ) in "+str(last_year), range_y =[800,1400])
 
     fig3 = go.Figure(go.Indicator(
         mode = "gauge+number",

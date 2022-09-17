@@ -30,3 +30,9 @@ def get_consumptions(company_id):
     if consumptions is None:
         abort(404)
     return consumptions
+
+def get_last_date():
+    conn = get_db_connection()
+    last_year = conn.execute('SELECT DISTINCT year FROM consumptions ORDER BY year DESC').fetchone()
+    last_month = conn.execute('SELECT DISTINCT month FROM consumptions where year = ? ORDER BY month DESC', (last_year['year'],)).fetchone()
+    return last_month['month'], last_year['year']
