@@ -4,7 +4,7 @@
 
 # imports
 from db import get_db_connection
-
+from utils import *
 class Company:
     def __init__(self, name, company_id, industry, summary):
 
@@ -49,5 +49,15 @@ class Company:
         print(self.data)
         return self.name
 
-    def monthly_difference(self, year, month):
-        self.data
+    # def monthly_difference(self, year, month):
+    #     self.data
+
+######
+# to show the order of results
+######
+
+# c = Company("sbb", 1, "bar", "fooo")
+
+# prev_month, prev_elec, curr_month, curr_elec = get_values(c.data, "2010", 5)
+
+# print(prev_month, prev_elec, curr_month, curr_elec)
