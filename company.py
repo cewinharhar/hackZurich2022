@@ -1,23 +1,34 @@
 # class with all the fields of the company
 # add a short summary of the company
 class Company:
-    def __init__(self, name, electricity_usage_current, industry, year):
+    def __init__(self, name, electricity_usage, industry, 
+                year, water_consumption, co2_emitted, summary):
         self.name = name
-        self.elec_current = electricity_usage_current
-        self.electricy_usage_per_year = {}
+        self.elec = electricity_usage
+        
+        self.water = water_consumption
+        self.co2 = co2_emitted
         self.industry = industry
         self.year = year
+        self.summary = summary
+        self.usage = self._add_usage()
 
     # method for calculating the % energy reduced / increased
-    def elec_difference(self, previous_elec):
-        return (((self.elec_current - previous_elec)/previous_elec)*100)
+    def calc_difference(self, type, previous_val):
+        if type == "electricity":
+            return (((self.elec - previous_val)/previous_val)*100)
+        if type == "water":
+            return (((self.water - previous_val)/previous_val)*100)
+        if type == "co2":
+            return (((self.co2 - previous_val)/previous_val)*100)
 
     # method for adding the current electricity to the current year
-    def add_electricity_usage(self):
-        self.electricy_usage_per_year[self.year] = self.elec_current
+    def _add_usage(self):
+        return { self.year:{"elec": self.elec, "water": self.water, "co2": self.co2}}
+    
+
+comp = Company("sbb", 1000, "train", 2022, 2000, 53, "man we like trains, foo, bar, bazzz")
 
 
 
-comp = Company("sbb", 1000, "manufactoring", 2022)
-comp.add_electricity_usage()
-print(comp.elec_difference(900), comp.electricy_usage_per_year)
+
