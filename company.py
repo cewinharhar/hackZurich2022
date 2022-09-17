@@ -3,8 +3,8 @@
 # specific field and sumarize into a dictionary
 
 # imports
-from db import get_db_connection, dict_factory, get_company, get_consumptions
-
+from db import get_db_connection
+from utils import *
 class Company:
     def __init__(self, name, company_id, industry, summary):
 
@@ -15,16 +15,7 @@ class Company:
         self.summary = summary
 
         # fetch from database:
-
-        #self.elecs = self._get_electricity()
-        #self.waters = self._get_water()
-        #self.co2s = self._get_co2()
         self.years =self._get_year()
-       # self.months = self._get_month()
-        
-        # the structure:
-
-        # {year: {"month" : 1, "elec": x, "water": x, "co2": x }}
         self.data = self._create_data()
 
     def _create_data(self):
@@ -46,30 +37,6 @@ class Company:
         # print(dictionary)
         return dictionary
 
-    # def _get_electricity(self):
-    #     conn = get_db_connection()
-    #     curs = conn.cursor()
-    #     results = curs.execute("SELECT electricity FROM consumptions WHERE company_id = ?",(self.id,))
-    #     data = results.fetchall()
-    #     conn.close()
-    #     return data
-
-    # def _get_water(self):
-    #     conn = get_db_connection()
-    #     curs = conn.cursor()
-    #     results = curs.execute("SELECT water FROM consumptions WHERE company_id = ?",(self.id,))
-    #     data = results.fetchall()
-    #     conn.close()
-    #     return data
-
-    # def _get_co2(self):
-    #     conn = get_db_connection()
-    #     curs = conn.cursor()
-    #     results = curs.execute("SELECT co2 FROM consumptions WHERE company_id = ?",(self.id,))
-    #     data = results.fetchall()
-    #     conn.close()
-    #     return data
-
     def _get_year(self):
         conn = get_db_connection()
         curs = conn.cursor()
@@ -78,25 +45,19 @@ class Company:
         conn.close()
         return data
 
-    # def _get_month(self):
-    #     conn = get_db_connection()
-    #     curs = conn.cursor()
-    #     results = curs.execute("SELECT month FROM consumptions WHERE company_id = ?",(self.id,))
-    #     data = results.fetchall()
-    #     conn.close()
-    #     return data
-
     def __str__(self):
-        '''         for e in self.elec:
-            print(e)
-        for e in self.water:
-            print(e)
-        for e in self.co2:
-            print(e)
-        for e in self.year:
-            print(e)
-        for e in self.month:
-            print(e) '''
-        #print(self.years)
         print(self.data)
         return self.name
+
+    # def monthly_difference(self, year, month):
+    #     self.data
+
+######
+# to show the order of results
+######
+
+# c = Company("sbb", 1, "bar", "fooo")
+
+# prev_month, prev_elec, curr_month, curr_elec = get_values(c.data, "2010", 5)
+
+# print(prev_month, prev_elec, curr_month, curr_elec)
