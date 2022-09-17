@@ -8,6 +8,7 @@ from company import Company
 from db import get_db_connection, get_company, get_consumptions 
 import plotly.graph_objects as go
 from utils import *
+import numpy as np
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your secret key'
@@ -28,12 +29,11 @@ def my_bar_chart():
 def index():
     conn = get_db_connection()
     companies = conn.execute('SELECT * FROM company').fetchall()
-    
     d = []
     graphsJSON = []
     for company in companies:
         c = Company(company['name'], company['id'], company['industry'], company['summary'])
-        print(c.name, c)
+        print(c.name, c.score)
         prev_month, prev_value, curr_month, cur_value = get_values(c.data, '2022', 9)
         df = {
             'Electricity': [prev_value, cur_value],
@@ -44,7 +44,8 @@ def index():
         cid = 'chart_'+str(company['id'])
         graphsJSON.append({'id': cid, 'df':df, 'graphJSON': graphJSON})
         consumptions = get_consumptions(company['id'])
-        d.append({"company":company, "consumptions":consumptions, 'chart_id':cid})
+        d.append({"company":c, "consumptions":consumptions, 'chart_id':cid})
+        d.sort(key=lambda x: x['company'].score, reverse=False)
     conn.close() 
     return render_template('index.html', d=d, graphsJSON=graphsJSON)
 
@@ -125,10 +126,44 @@ def edit(id):
 
 @app.route('/<int:id>/delete', methods=('POST',))
 def delete(id):
-    company = get_company(id)
+    company = get_consumptions(id)
     conn = get_db_connection()
     conn.execute('DELETE FROM company WHERE id = ?', (id,))
     conn.commit()
     conn.close()
     flash('"{}" was successfully deleted!'.format(company['name']))
+    return redirect(url_for('index'))
+
+@app.route('/delete/month', methods=('GET',))
+def delete_months(year=2022, month=12):
+    conn = get_db_connection()
+    last_year = conn.execute('SELECT DISTINCT year FROM consumptions ORDER BY year DESC').fetchone()
+    last_month = conn.execute('SELECT DISTINCT month FROM consumptions where year = ? ORDER BY month DESC', (last_year['year'],)).fetchone()
+    new_month = last_month['month']+1
+    new_year = last_year['year']
+    r = conn.execute('DELETE FROM consumptions WHERE year = ? AND month = ?', (year, month,))
+    print(r)
+    conn.commit()
+    conn.close()
+    return redirect(url_for('index'))
+
+@app.route('/add', methods=('GET',))
+def add_months():
+    connection = get_db_connection()
+    last_year = connection.execute('SELECT DISTINCT year FROM consumptions ORDER BY year DESC').fetchone()
+    last_month = connection.execute('SELECT DISTINCT month FROM consumptions where year = ? ORDER BY month DESC', (last_year['year'],)).fetchone()
+    new_month = last_month['month']+1
+    new_year = last_year['year']
+    if new_month > 12:
+        new_month = 1
+        new_year += 1
+    for company_id in range(11):
+        electricity = round(1000 + round(np.random.random(), 2)*150 * np.random.choice([-1, 1, 1, 1]), 1)
+        water = round(5 + round(np.random.random(), 2)*150 * np.random.choice([-1, 1, 1, 1]), 1)
+        co2 = round(3 + round(np.random.random(), 2)*150 * np.random.choice([-1, 1, 1, 1]), 1)
+        r = connection.execute("INSERT INTO consumptions (company_id, year, month, electricity, water, co2) VALUES (?, ?, ?, ?, ?, ?)",
+                (company_id, new_year, new_month, electricity, water, co2))
+        print(r)
+        connection.commit()
+    connection.close()
     return redirect(url_for('index'))

@@ -44,8 +44,11 @@ def initConsumptions():
     cur = connection.cursor()
     for company in range(11): 
         #increaseValue = 0.1
-        for year in range(2000, 2023): 
-            for month in range(1,13):
+        for year in range(2000, 2023):
+            ub = 13
+            if year == 2022:
+                ub = 10
+            for month in range(1,ub):
                 #increaseValue = increaseValue + round(np.random.random(), 1) / 10
 
                 electricity = round(1000 + round(np.random.random(), 2)*150 * np.random.choice([-1, 1, 1, 1]), 1)
