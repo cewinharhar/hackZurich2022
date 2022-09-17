@@ -1,41 +1,79 @@
-from flask import Flask, render_template, request, url_for, flash, redirect
+from flask import Flask, render_template, request, url_for, flash, redirect, Markup
 import pandas as pd
 import json
 import plotly
 import plotly.express as px
+import plotly.offline as pyo
 from company import Company
 from db import get_db_connection, get_company, get_consumptions 
+import plotly.graph_objects as go
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your secret key'
+
+def my_bar_chart():
+    df = pd.DataFrame({
+            'Electricity': ['10', '9'],
+            'Amount': [4, 1],
+            'Months': ['Octomber', 'Semptember']
+        })
+    fig = px.bar(df, x='Amount', y='Electricity', color='Months', barmode='group', orientation='h')
+    my_bar_chart = pyo.plot(fig, output_type='div', include_plotlyjs=False)
+    return Markup(my_bar_chart)
 
 @app.route('/')
 def index():
     conn = get_db_connection()
     companies = conn.execute('SELECT * FROM company').fetchall()
-    df = pd.DataFrame({
-      'Fruit': ['Apples', 'Oranges', 'Bananas', 'Apples', 'Oranges', 
-      'Bananas'],
-      'Amount': [4, 1, 2, 2, 4, 5],
-      'City': ['SF', 'SF', 'SF', 'Montreal', 'Montreal', 'Montreal']
-   })
-    fig = px.bar(df, x='Fruit', y='Amount', color='City', barmode='group')
-    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    
     d = []
+    graphsJSON = []
     for company in companies:
+        df = pd.DataFrame({
+            'Electricity': [10, 9],
+            'Months': ['Octomber', 'Semptember']
+        })
+        fig = px.bar(df, x='Electricity', y='Months', orientation='h')
+        graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+        cid = 'chart_'+str(company['id'])
+        graphsJSON.append({'id': cid, 'graphJSON': graphJSON})
         consumptions = get_consumptions(company['id'])
-        d.append({"company":company, "consumptions":consumptions})
+        d.append({"company":company, "consumptions":consumptions, 'chart_id':cid})
     conn.close() 
-    return render_template('index.html', d=d, graphJSON=graphJSON)
+    return render_template('index.html', d=d, graphsJSON=graphsJSON)
 
 @app.route('/<int:company_id>')
 def company(company_id):
     company = get_company(company_id)
-    print(company)
-    c = Company(company['name'], company['id'], company['industry'], "aaaaa")
-    consumptions = get_consumptions(company_id)
-    print(c)
-    return render_template('company.html', company=company, consumptions=consumptions)
+    #print(company)
+    c = Company(company['name'], company['id'], company['industry'], company['summary'])
+    consumptions = c.data
+    #print(consumptions['2000'])
+    for yearlydata in consumptions:
+        #print(yearlydata)
+        for year in yearlydata:
+            if(year == '2022'):
+                months = []
+                electricity = []
+                for monthlydata in yearlydata[year]:
+                    print(monthlydata)
+                    months.append(monthlydata['month'])
+                    electricity.append(monthlydata['electricity'])
+    df = pd.DataFrame({
+            'Electricity Consumption': electricity,
+            'Months': ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+        })
+    fig3 = go.Figure(go.Indicator(
+        mode = "gauge+number",
+        value = 270,
+        domain = {'x': [0, 1], 'y': [0, 1]},
+        title = {'text': "Speed"}))
+    print(df)
+    fig2 = px.bar(df, x='Months', y='Electricity Consumption')
+    graphJSON2 = json.dumps(fig2, cls=plotly.utils.PlotlyJSONEncoder)
+    graphJSON3 = json.dumps(fig3, cls=plotly.utils.PlotlyJSONEncoder)
+    #print(c)
+    return render_template('company.html', company=company, consumptions=consumptions, graphJSON2=graphJSON2, graphJSON3=graphJSON3)
 
 @app.route('/create', methods=('GET', 'POST'))
 def create():

@@ -1,14 +1,29 @@
-{% extends 'base.html' %}
-
-{% block industry %}
-    <h2>{% block name %} {{ company['name'] }} {% endblock %}</h2>
+{% extends 'base.html' %} {% block industry %}
+<h1>{{ company['name'] }}</h1>
+<div class="row">
+  <div class="col-12">
     <p><b>Industry:</b> {{ company['industry'] }}</p>
     <p><b>Summary:</b> {{ company['summary'] }}</p>
-    {% for consumption in consumptions %}
-        <p><b>Date:</b> {{ consumption['year']}}/{{ consumption['month']}}</p>
-        <p><b>Electricity:</b> {{ consumption['electricity']}}</p>
-        <p><b>Water:</b> {{ consumption['water']}}</p>
-        <p><b>CO2:</b> {{ consumption['co2']}}</p>
-    {% endfor %}
-    <span class="badge badge-primary">{{ company['created'] }}</span>
+  </div>
+  <div class="col-8">
+    <div id="p2" class="chart"></div>
+  </div>
+  <div class="col-4">
+    <div id="p3" class="chart"></div>
+  </div>
+</div>
+{% for yearlydata in consumptions %} {% for year in yearlydata %} {% for
+monthlydata in yearlydata[year] %}
+<p><b>Date:</b>{{year}}/{{monthlydata['month']}}</p>
+<p><b>Electricity:</b> {{ monthlydata['electricity']}}</p>
+<p><b>Water:</b> {{ monthlydata['water']}}</p>
+<p><b>CO2:</b> {{ monthlydata['co2']}}</p>
+{% endfor %} {% endfor %} {% endfor %}
+<span class="badge badge-primary">{{ company['created'] }}</span>
+<script type="text/javascript">
+  var p2 = {{graphJSON2 | safe}}
+  Plotly.plot('p2', p2, {})
+  var p3 = {{graphJSON3 | safe}}
+  Plotly.plot('p3', p3, {})
+</script>
 {% endblock %}
