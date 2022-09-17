@@ -12,7 +12,7 @@ def initCompany():
                 ('Novartis', 'Pharmaceutical', ', Novartis is an international leader in the development and marketing of pharmaceuticals and nutrition products, in addition to operating a number of research institutes dedicated to the study of gene therapy.'))
 
     cur.execute("INSERT INTO company (name, industry, summary) VALUES (?, ?, ?)",
-                ('Zühlke', 'Software & Tech Services', 'Zühlke is a global innovation service provider. They envisage ideas and create new business models for clients by developing services and products based on new technologies – from the initial vision through development to deployment, production and operation. They specialise in strategy and business innovation, digital solutions and application services – in addition to device and systems engineering.))
+                ('Zühlke', 'Software & Tech Services', 'Zühlke is a global innovation service provider. They envisage ideas and create new business models for clients by developing services and products based on new technologies – from the initial vision through development to deployment, production and operation. They specialise in strategy and business innovation, digital solutions and application services – in addition to device and systems engineering.'))
 
     cur.execute("INSERT INTO company (name, industry, summary) VALUES (?, ?, ?)",
                 ('ABB', 'Electrical Equipment & Parts', 'ABB Limited provides power and automation technologies. The Company operates under segments that include power products, power systems, automation products, process automation, and robotics.'))
