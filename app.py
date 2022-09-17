@@ -33,6 +33,7 @@ def index():
     graphsJSON = []
     for company in companies:
         c = Company(company['name'], company['id'], company['industry'], company['summary'])
+        print(c.name, c)
         prev_month, prev_value, curr_month, cur_value = get_values(c.data, '2022', 9)
         df = {
             'Electricity': [prev_value, cur_value],
@@ -53,7 +54,7 @@ def company(company_id):
     #print(company)
     c = Company(company['name'], company['id'], company['industry'], company['summary'])
     consumptions = c.data
-    #print(consumptions['2000'])
+    print(c)
     for yearlydata in consumptions:
         #print(yearlydata)
         for year in yearlydata:
@@ -61,7 +62,7 @@ def company(company_id):
                 months = []
                 electricity = []
                 for monthlydata in yearlydata[year]:
-                    print(monthlydata)
+                    #print(monthlydata)
                     months.append(monthlydata['month'])
                     electricity.append(monthlydata['electricity'])
     df = pd.DataFrame({
@@ -76,7 +77,7 @@ def company(company_id):
         number = { 'suffix': "%" },
         domain = {'x': [0, 1], 'y': [0, 1]},
         title = {'text': "Speed"}))
-    print(df)
+    #print(df)
     
     elecBarJSON = json.dumps(elecBarPlot, cls=plotly.utils.PlotlyJSONEncoder)
     graphJSON3 = json.dumps(fig3, cls=plotly.utils.PlotlyJSONEncoder)
