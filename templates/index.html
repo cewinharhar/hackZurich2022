@@ -2,12 +2,13 @@
 
 {% block industry %}
     <h1>{% block name %} Welcome to LeaderBoard {% endblock %}</h1>
-    {% for company in companies %}
-        <a href="{{ url_for('company', company_id=company['id']) }}">
-            <h2>{{ company['name'] }}</h2>
+    {% for df in d %}
+        <a href="{{ url_for('company', company_id=df['company']['id']) }}">
+            <h2>{{ df['company']['name'] }}</h2>
         </a>
-        <span class="badge badge-primary">{{ company['created'] }}</span>
-        <a href="{{ url_for('edit', id=company['id']) }}">
+        <div id='chart' class='chart'”></div>
+        <span class="badge badge-primary">{{ df['company']['created'] }}</span>
+        <a href="{{ url_for('edit', id=df['company']['id']) }}">
             <span class="badge badge-warning">Edit</span>
         </a>
         <hr>
