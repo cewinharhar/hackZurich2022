@@ -30,8 +30,32 @@ def get_values(data, the_year, the_month, type="electricity"):
                         if month_data['month'] == "12":
                             prev_value = month_data[type]
 
-    
-
-
 
     return prev_month, prev_value, curr_month, cur_value
+
+# just one company. 
+# def calculate_init_score(companies, year, month):
+#     pharma_scores = []
+#     software_scores = []
+#     electrical_scores = []
+#     retail_scores = []
+
+#     for company in companies:
+#         prev_month, prev_elec, curr_month, elec = get_values(company.data, year, month)
+#         prev_month, prev_value, curr_month, water = get_values(company.data, year, month, type = "water")
+#         prev_month, prev_value, curr_month, co2 = get_values(company.data, year, month, type = "co2")
+
+#         score = (0.75*elec + 0.125*co2 + 0.125*water)
+
+#         if company.industry =='Software & Tech Services':
+#             software_scores.append({company.name: score})
+#         elif company.industry =='Pharmaceutical':
+#             pharma_scores.append({company.name: score})
+#         elif company.industry =='Retail':
+#             retail_scores.append({company.name: score})
+#         elif company.industry =='Electrical Equipment & Parts':
+#             electrical_scores.append({company.name: score})
+
+#     return pharma_scores, software_scores, electrical_scores, retail_scores
+
+
