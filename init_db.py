@@ -8,13 +8,10 @@ with open('schema.sql') as f:
 
 def initCompany():
     cur = connection.cursor()
-    cnames = ['Novartis', 'Zühlke']
-    cindustries = ['Pharma', 'IT'] 
-    for c in range(6):
-        cur.execute("INSERT INTO company (name, industry, summary) VALUES (?, ?, ?)", 
-                    ('Novartis', 'Industry X', 'Descriptio cation when wher summary xy the company did'))
-        cur.execute("INSERT INTO company (name, industry, summary) VALUES (?, ?, ?)",
-            ('Zühlke', 'Industry Y', 'Descriptio cation when wher summary xy the company did'))
+    cur.execute("INSERT INTO company (name, industry, summary) VALUES (?, ?, ?)", 
+                ('Novartis', 'Industry X', 'Descriptio cation when wher summary xy the company did'))
+    cur.execute("INSERT INTO company (name, industry, summary) VALUES (?, ?, ?)",
+        ('Zühlke', 'Industry Y', 'Descriptio cation when wher summary xy the company did'))
     connection.commit()
 
 def initConsumptions():
