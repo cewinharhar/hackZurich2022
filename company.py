@@ -31,7 +31,7 @@ class Company:
     def _get_electricity(self):
         conn = sqlite3.connect("database.db")
         curs = conn.cursor()
-        results = curs.execute("SELECT electricity FROM consumptions WHERE company_id == self.id")
+        results = curs.execute("SELECT electricity FROM consumptions WHERE company_id = ?",(self.id,))
         data = results.fetchall()
         conn.close()
         return data
@@ -39,7 +39,7 @@ class Company:
     def _get_water(self):
         conn = sqlite3.connect("database.db")
         curs = conn.cursor()
-        results = curs.execute("SELECT water FROM consumptions WHERE company_id == self.id")
+        results = curs.execute("SELECT water FROM consumptions WHERE company_id = ?",(self.id,))
         data = results.fetchall()
         conn.close()
         return data
@@ -47,7 +47,7 @@ class Company:
     def _get_co2(self):
         conn = sqlite3.connect("database.db")
         curs = conn.cursor()
-        results = curs.execute("SELECT co2 FROM consumptions WHERE company_id == self.id")
+        results = curs.execute("SELECT co2 FROM consumptions WHERE company_id = ?",(self.id,))
         data = results.fetchall()
         conn.close()
         return data
@@ -55,7 +55,7 @@ class Company:
     def _get_year(self):
         conn = sqlite3.connect("database.db")
         curs = conn.cursor()
-        results = curs.execute("SELECT year FROM consumptions WHERE company_id == self.id")
+        results = curs.execute("SELECT year FROM consumptions WHERE company_id = ?",(self.id,))
         data = results.fetchall()
         conn.close()
         return data
@@ -63,12 +63,7 @@ class Company:
     def _get_month(self):
         conn = sqlite3.connect("database.db")
         curs = conn.cursor()
-        results = curs.execute("SELECT month FROM consumptions WHERE company_id == self.id")
+        results = curs.execute("SELECT month FROM consumptions WHERE company_id = ?",(self.id,))
         data = results.fetchall()
         conn.close()
         return data
-
-
-c = Company("sbb", 1, "health", "foo bar baz")
-
-print(c.elec)
