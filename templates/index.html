@@ -1,22 +1,26 @@
 {% extends 'base.html' %}
 
 {% block industry %}
-    <h1>{% block name %} Welcome to LeaderBoard {% endblock %}</h1>
+    <h1>{% block name %} Welcome to Leader Board {% endblock %}</h1>
     {% for df in d %}
-    <div class='row'>
-        <div class='col-6'>
+    <div class='row company_row'>
+        <div class='col-3'>
+            <!--<a href="{{ url_for('edit', id=df['company']['id']) }}">
+                <span class="badge badge-warning">Edit</span>
+            </a>-->
             <a href="{{ url_for('company', company_id=df['company']['id']) }}">
-            <h2>{{ df['company']['name'] }}</h2>
-        </a>
-        <span class="badge badge-primary">{{ df['company']['created'] }}</span>
-        <a href="{{ url_for('edit', id=df['company']['id']) }}">
-            <span class="badge badge-warning">Edit</span>
-        </a>
+                <h2 style="color: green;">{{ df['company']['name'] }}</h2>
+            </a>
+            <span class="badge badge-primary">{{ df['company']['industry'] }}</span>
+            
         </div>
-        <div class='col-6'>
-            <div id={{ df['chart_id'] }} class='chart'></div>
+        <div class='col-2'>
+            <p>Change in energy from previous month</p>
+        </div>
+        <div class='col-7'>
+            <div id={{ df['chart_id'] }} class='chart' style='float: right'></div>
         </div>
     </div>
-        <hr>
+        <br>
     {% endfor %}
 {% endblock %}

@@ -40,8 +40,14 @@
     ></script>
 
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <nav class="navbar navbar-expand-md navbar-light bg-light">
-      <a class="navbar-brand" href="{{ url_for('index')}}">Leader Board</a>
+    <nav class="navbar navbar-expand-md navbar-light bg-logo">
+      <a class="navbar-brand" href="{{ url_for('index')}}">
+        <img
+          src="{{url_for('static', filename='media/logo.png')}}"
+          width="120px"
+          height="80px"
+        />
+      </a>
       <button
         class="navbar-toggler"
         type="button"
@@ -69,45 +75,42 @@
       <div class="alert alert-danger">{{ message }}</div>
       {% endfor %} {% block industry %} {% endblock %}
     </div>
-
     <script type="text/javascript">
-      //    var data = [
-      //  {
-      //    domain: { x: [0, 1], y: [0, 1] },
-      //    value: 270,
-      //    title: { text: "Speed" },
-      //    type: "indicator",
-      //    mode: "gauge+number"
-      //  }
-      //];
-
-      //var layout = { width: 600, height: 500, margin: { t: 0, b: 0 } };
-      //Plotly.newPlot('chart_1', data, layout);
-
-       var graphs = {{graphsJSON | safe}}
-        console.log("graphs", graphs)
-        for(graph of graphs){
-          var plot = JSON.parse(graph.graphJSON).data[0]
-          var data = [
-           {
-              type: "indicator",
-              mode: "number+gauge+delta",
-              gauge: { shape: "bullet" },
-              delta: { reference: 300 },
-              value: 220,
-              domain: { x: plot.x, y: plot.y },
-              title: { text: "Profit" }
+      var graphs = {{graphsJSON | safe}}
+       //console.log("graphs", graphs)
+       for(graph of graphs){
+         console.log(graph.df.Electricity)
+         var plot = JSON.parse(graph.graphJSON).data[0]
+         var data = [{
+            type: "indicator",
+            mode: "number+gauge+delta",
+            delta: { reference: graph.df.Electricity[1],
+              decreasing:{color: 'green'},
+              increasing: {color: 'red'}
+            },
+            value: graph.df.Electricity[0],
+            domain: { x: plot.x, y: plot.y },
+            title: { text: "Energy<br><span style='color: gray; font-size:0.8em'>MJ</span>" },
+            legendgrouptitle: { text: "Change in energy from previous month" },
+            gauge: {
+              shape: "bullet",
+              threshold: {
+                line: { color: "red", width: 2, gradient: { yanchor: "vertical" } },
+                thickness: 0.75,
+                value: graph.df.Electricity[1]
+              },
+              bar: { color: "#ffc107" }
             }
-          ]
-          var layout = { width: 500, height: 100, margin: { t: 0, b: 0 } };
-          Plotly.newPlot(graph.id, data, layout);
-          console.log('plot: ', JSON.parse(graph.graphJSON).data[0])
-          //var ps = {{plot | safe}}
-          //console.log("ps:", ps)
-          //Plotly.plot(graph.id, plot, {})
-          //Plotly.newPlot(graph.id, plot, { displaylogo: false, displayModeBar: false });
+          }]
+         var layout = { width: 500, height: 100, margin: { t: 0, b: 0 } };
+         Plotly.newPlot(graph.id, data, layout);
+         //console.log('plot: ', JSON.parse(graph.graphJSON).data[0])
+         //var ps = {{plot | safe}}
+         //console.log("ps:", ps)
+         //Plotly.plot(graph.id, plot, {})
+         //Plotly.newPlot(graph.id, plot, { displaylogo: false, displayModeBar: false });
 
-        }
+       }
     </script>
   </body>
 </html>

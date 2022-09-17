@@ -48,9 +48,9 @@ def initConsumptions():
             for month in range(1,13):
                 #increaseValue = increaseValue + round(np.random.random(), 1) / 10
 
-                electricity = round(1000 + round(np.random.random(), 2) * np.random.choice([-1, 1, 1, 1]), 1)
-                water = round(5 + round(np.random.random(), 2) * np.random.choice([-1, 1, 1, 1]), 1)
-                co2 = round(3 + round(np.random.random(), 2) * np.random.choice([-1, 1, 1, 1]), 1)
+                electricity = round(1000 + round(np.random.random(), 2)*150 * np.random.choice([-1, 1, 1, 1]), 1)
+                water = round(5 + round(np.random.random(), 2)*150 * np.random.choice([-1, 1, 1, 1]), 1)
+                co2 = round(3 + round(np.random.random(), 2)*150 * np.random.choice([-1, 1, 1, 1]), 1)
 
                 cur.execute("INSERT INTO consumptions (company_id, year, month, electricity, water, co2) VALUES (?, ?, ?, ?, ?, ?)",
                         (company, year, month, electricity, water, co2))

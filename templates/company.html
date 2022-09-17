@@ -1,28 +1,104 @@
 {% extends 'base.html' %} {% block industry %}
-<h1>{{ company['name'] }}</h1>
+
+<h1>
+  <img
+    src="{{url_for('static', filename='media/energy-efficiency-a.png')}}"
+    width="80px"
+    style="float: right"
+  />{{ company['name'] }}
+</h1>
+<hr />
 <div class="row">
-  <div class="col-12">
-    <p><b>Industry:</b> {{ company['industry'] }}</p>
+  <div class="col-6">
+    <p>
+      <b>Industry:</b>
+      <span class="badge badge-primary">{{ company['industry'] }}</span>
+    </p>
+  </div>
+  <div class="col-6">
     <p><b>Summary:</b> {{ company['summary'] }}</p>
   </div>
-  <div class="col-8">
-    <div id="p2" class="chart"></div>
+</div>
+<hr />
+<div class="row">
+  <div class="col-6">
+    <h3>Electricity usage reduction</h3>
+    <p>
+      <b>Heating:</b>
+      <span>-7.4%</span>
+    </p>
+    <p>
+      <b>Lighting:</b>
+      <span>+2.4%</span>
+    </p>
+    <p>
+      <b>Other:</b>
+      <span>+0.4%</span>
+    </p>
   </div>
-  <div class="col-4">
+  <div class="col-6">
     <div id="p3" class="chart"></div>
   </div>
 </div>
-{% for yearlydata in consumptions %} {% for year in yearlydata %} {% for
+<hr />
+<div class="row">
+  <div class="col-6">
+    <h3>Fossile Fuel reduction</h3>
+    <p>
+      <b>Logistic:</b>
+      <span>-6.4%</span>
+    </p>
+    <p>
+      <b>Other:</b>
+      <span>+2.4%</span>
+    </p>
+  </div>
+  <div class="col-6">
+    <div class="col-4">
+      <div id="x3" class="chart"></div>
+    </div>
+  </div>
+</div>
+<hr />
+<div class="row">
+  <div class="col-6">
+    <h3>Water usage reduction</h3>
+    <p>
+      <b>Upkeep:</b>
+      <span>-3.4%</span>
+    </p>
+    <p>
+      <b>Other:</b>
+      <span>+0.6%</span>
+    </p>
+  </div>
+  <div class="col-6">
+    <div class="col-4">
+      <div id="x3" class="chart"></div>
+    </div>
+  </div>
+</div>
+<hr />
+<div class="row">
+  <div class="col-8">
+    <div id="divElecBar" class="chart"></div>
+  </div>
+  <div class="col-4">
+    <div id="x" class="chart"></div>
+  </div>
+</div>
+
+<!--{% for yearlydata in consumptions %} {% for year in yearlydata %} {% for
 monthlydata in yearlydata[year] %}
 <p><b>Date:</b>{{year}}/{{monthlydata['month']}}</p>
 <p><b>Electricity:</b> {{ monthlydata['electricity']}}</p>
 <p><b>Water:</b> {{ monthlydata['water']}}</p>
 <p><b>CO2:</b> {{ monthlydata['co2']}}</p>
-{% endfor %} {% endfor %} {% endfor %}
+{% endfor %} {% endfor %} {% endfor %}-->
 <span class="badge badge-primary">{{ company['created'] }}</span>
 <script type="text/javascript">
-  var p2 = {{graphJSON2 | safe}}
-  Plotly.plot('p2', p2, {})
+  var divElecBar = {{elecBarJSON | safe}}
+  Plotly.plot('divElecBar', divElecBar, {})
   var p3 = {{graphJSON3 | safe}}
   Plotly.plot('p3', p3, {})
 </script>
