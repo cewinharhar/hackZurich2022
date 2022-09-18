@@ -6,7 +6,7 @@
     </button>-->
     <h1>{% block name %} Welcome to Leader Board {% endblock %}</h1>
     <div class='row justify-content-end'>
-    <i style="margin-right: 17%; margin-bottom: 5px;">Change in energy from previous month</i>
+    <i style="margin-right: 17%; margin-bottom: 5px;">Change in energy from previous month in MJ</i>
     </div>
     {% for df in d %}
         <div class='row company_row'>
@@ -21,7 +21,7 @@
                 
             </div>
             <div class='col-3'>
-                <b>Current month score:</b><br>
+                <b>Overall score:</b><br>
                 <span class="badge badge-info" style="font-size: 32px">{{df['company']['score']}}</span>
             </div>
             <div class='col-6'>

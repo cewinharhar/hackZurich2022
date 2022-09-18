@@ -16,26 +16,34 @@ app.config['SECRET_KEY'] = 'your secret key'
 
 MONTHS =  ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
-def my_bar_chart():
-    df = pd.DataFrame({
-            'Electricity': ['10', '9'],
-            'Amount': [4, 1],
-            'Months': ['Octomber', 'Semptember']
-        })
-    fig = px.bar(df, x='Amount', y='Electricity', color='Months', barmode='group', orientation='h')
-    my_bar_chart = pyo.plot(fig, output_type='div', include_plotlyjs=False)
-    return Markup(my_bar_chart)
+def getCoScoresMean():
+    conn = get_db_connection()
+    companies = conn.execute('SELECT * FROM company').fetchall()
+    conn.close()
+    coScores = []
+    for company in companies:
+        c = Company(company['name'], company['id'], company['industry'], company['summary'])
+        print(c.name, c.score)
+        coScores.append(c.score)
+    return statistics.mean(coScores)
 
 @app.route('/')
 def index():
     conn = get_db_connection()
     companies = conn.execute('SELECT * FROM company').fetchall()
+    last_year = conn.execute('SELECT DISTINCT year FROM consumptions ORDER BY year DESC').fetchone()
+    last_month = conn.execute('SELECT DISTINCT month FROM consumptions where year = ? ORDER BY month DESC', (last_year['year'],)).fetchone()
+    last_month = last_month['month']
+    last_year = last_year['year']
+    conn.close()
     d = []
     graphsJSON = []
+    coScoresMean = getCoScoresMean()
     for company in companies:
         c = Company(company['name'], company['id'], company['industry'], company['summary'])
-        print(c.name, c.score)
-        prev_month, prev_value, curr_month, cur_value = get_values(c.data, '2022', 9)
+        #print(c.name, c.score)
+        c.score = int((1/(1 + np.exp(-((c.score - coScoresMean)/coScoresMean)))) *100 )
+        prev_month, prev_value, curr_month, cur_value = get_values(c.data, str(last_year), last_month)
         df = {
             'Electricity': [prev_value, cur_value],
             'Months': [MONTHS[prev_month-1], MONTHS[curr_month-1]]
@@ -46,14 +54,15 @@ def index():
         graphsJSON.append({'id': cid, 'df':df, 'graphJSON': graphJSON})
         consumptions = get_consumptions(company['id'])
         d.append({"company":c, "consumptions":consumptions, 'chart_id':cid})
-        d.sort(key=lambda x: x['company'].score, reverse=False)
-    conn.close() 
+        d.sort(key=lambda x: x['company'].score, reverse=True)     
     return render_template('index.html', d=d, graphsJSON=graphsJSON)
 
 @app.route('/<int:company_id>')
 def company(company_id):
     company = get_company(company_id)
     c = Company(company['name'], company['id'], company['industry'], company['summary'])
+    coScoresMean = getCoScoresMean()
+    c.score = int((1/(1 + np.exp(-((c.score - coScoresMean)/coScoresMean)))) *100 )
     consumptions = c.data
     last_month, last_year = get_last_date()
     for yearlydata in consumptions:
@@ -83,36 +92,38 @@ def company(company_id):
     waterMean = statistics.mean(waterLast[:-1])
     elecLMS = (1/(1 + np.exp(-(-(elecLast[-1]-elecMean)/elecMean)))) *100
     waterLMS = (1/(1 + np.exp(-(-(waterLast[-1]-waterMean)/waterMean)))) *100
-
+    
     elecFig = go.Figure(go.Indicator(
         mode = "gauge+number",
         value = elecLMS,
         gauge = {'axis' : {'range': [0, 100]}},
         domain = {'x': [0, 1], 'y': [0, 1]},
-        title = {'text': "Speed"}))
+        title = {'text': "Rating"}))
     waterFig = go.Figure(go.Indicator(
         mode = "gauge+number",
         gauge = {'axis' : {'range': [0, 100]}},
         value = waterLMS,
         domain = {'x': [0, 1], 'y': [0, 1]},
-        title = {'text': "Speed"}))
+        title = {'text': "Rating"}))
     
     elecGraphJSON3 = json.dumps(elecFig, cls=plotly.utils.PlotlyJSONEncoder)
     waterGraphJSON3 = json.dumps(waterFig, cls=plotly.utils.PlotlyJSONEncoder)
-    return render_template('company.html', company=company, consumptions=consumptions, waterBarJSON=waterBarJSON, elecBarJSON=elecBarJSON, elecGraphJSON3=elecGraphJSON3, waterGraphJSON3=waterGraphJSON3)
+    badgeN = round(elecLMS/33)
+    IMAGES = ['media/energy-efficiency-a.png','media/energy-efficiency-b.png','media/energy-efficiency-c.png']
+    return render_template('company.html', badge=IMAGES[badgeN], company=c, consumptions=consumptions, waterBarJSON=waterBarJSON, elecBarJSON=elecBarJSON, elecGraphJSON3=elecGraphJSON3, waterGraphJSON3=waterGraphJSON3)
 
 @app.route('/create', methods=('GET', 'POST'))
 def create():
     if request.method == 'POST':
         name = request.form['name']
         industry = request.form['industry']
-
+        summary = request.form['summary']
         if not name:
             flash('Name is required!')
         else:
             conn = get_db_connection()
-            conn.execute('INSERT INTO company (name, industry) VALUES (?, ?)',
-                         (name, industry))
+            conn.execute('INSERT INTO company (name, industry, summary) VALUES (?, ?, ?)',
+                         (name, industry, summary))
             conn.commit()
             conn.close()
             return redirect(url_for('index'))

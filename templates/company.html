@@ -2,7 +2,7 @@
 
 <h1>
   <img
-    src="{{url_for('static', filename='media/energy-efficiency-a.png')}}"
+    src="{{url_for('static', filename=badge)}}"
     width="80px"
     style="float: right"
   />{{ company['name'] }}
@@ -13,6 +13,12 @@
     <p>
       <b>Industry:</b>
       <span class="badge badge-primary">{{ company['industry'] }}</span>
+    </p>
+    <p>
+      <b>Overall score:</b>
+      <span class="badge badge-info" style="font-size: 28px"
+        >{{company['score']}}</span
+      >
     </p>
   </div>
   <div class="col-6">
