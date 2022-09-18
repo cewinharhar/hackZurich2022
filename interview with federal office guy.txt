@@ -1,0 +1,34 @@
+
+companies outsource energy behaviour sevices
+
+What industry shows the relative highest energy consumption?
+	Heating is the most important aspect
+	retailers
+
+What regulations are available to change the behaviour of companies energy usage?
+	none
+Are there plans to adapt the regulation?
+	no
+
+In your opinion what would be the biggest motivation factors for companies to adjust their energy consumption?
+	reduce costs
+
+Are there possibilities to award companies which show a high reduction of electricity usage?
+	In the form of 
+		financial 
+		image related
+		certificate -> the swiss federal office would be okay to create and accredit the certificate
+		
+		-> price balone d'orre 
+			price of going along with the federal office
+			
+		-> you can get substities for changing from fossile fule to renevable, spread awarness
+		
+		
+What are osbtacles to get electricity consumption data from companies?
+		
+Would the gouvernment be interested in such a plattform?
+		3th party is neutral
+		and it worked before https://www.energieschweiz.ch/tools/energiereporter/
+		the gouvernmet would subsitate it
+
