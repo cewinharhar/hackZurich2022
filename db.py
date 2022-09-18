@@ -1,5 +1,6 @@
 import sqlite3
 from werkzeug.exceptions import abort
+import statistics
 
 def dict_factory(cursor, row):
     d = {}
@@ -36,6 +37,18 @@ def get_last_date():
     last_year = conn.execute('SELECT DISTINCT year FROM consumptions ORDER BY year DESC').fetchone()
     last_month = conn.execute('SELECT DISTINCT month FROM consumptions where year = ? ORDER BY month DESC', (last_year['year'],)).fetchone()
     return last_month['month'], last_year['year']
+
+def get_sd(type):
+    conn = get_db_connection()
+    if type == 'electricity':
+        results = conn.execute("SELECT electricity FROM consumptions").fetchall()
+    if type == 'water':
+        results = conn.execute("SELECT water FROM consumptions").fetchall()
+    conn.close()
+    result = []
+    for res in results:
+        result.append(res[type])
+    return statistics.stdev(result)
 
 def get_total_mean_by_type(type):
     conn = get_db_connection()
