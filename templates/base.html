@@ -76,9 +76,9 @@
       {% endfor %} {% block industry %} {% endblock %}
     </div>
     <script type="text/javascript">
-      var graphs = {{graphsJSON | safe}}
-       //console.log("graphs", graphs)
-       for(graph of graphs){
+      var graphs = {{ graphsJSON | safe }}
+      //console.log("graphs", graphs)
+      for(graph of graphs) {
          console.log(graph.df.Electricity)
          var plot = JSON.parse(graph.graphJSON).data[0]
          var data = [{
@@ -103,12 +103,6 @@
           }]
          var layout = { width: 500, height: 100, margin: { t: 0, b: 0 } };
          Plotly.newPlot(graph.id, data, layout);
-         //console.log('plot: ', JSON.parse(graph.graphJSON).data[0])
-         //var ps = {{plot | safe}}
-         //console.log("ps:", ps)
-         //Plotly.plot(graph.id, plot, {})
-         //Plotly.newPlot(graph.id, plot, { displaylogo: false, displayModeBar: false });
-
        }
     </script>
   </body>

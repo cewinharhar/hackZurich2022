@@ -9,6 +9,7 @@ from db import *
 import plotly.graph_objects as go
 from utils import *
 import numpy as np
+import statistics
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your secret key'
@@ -52,41 +53,53 @@ def index():
 @app.route('/<int:company_id>')
 def company(company_id):
     company = get_company(company_id)
-    #print(company)
     c = Company(company['name'], company['id'], company['industry'], company['summary'])
     consumptions = c.data
     last_month, last_year = get_last_date()
-    print(c)
     for yearlydata in consumptions:
         #print(yearlydata)
         for year in yearlydata:
             if(year == str(last_year)):
-                months = []
+                water = []
                 electricity = []
                 for monthlydata in yearlydata[year]:
                     #print(monthlydata)
-                    months.append(monthlydata['month'])
+                    water.append(monthlydata['water'])
                     electricity.append(monthlydata['electricity'])
-    print(months)
-    print(electricity)
-    df = pd.DataFrame({
-            'Electricity Consumption': electricity,
-            'Months': MONTHS[:last_month],
-        })
-    elecBarPlot = px.bar(df, x='Months', y='Electricity Consumption', title="Monthly Energy consumption in MegaJoule (MJ) in "+str(last_year), range_y =[800,1400])
 
-    fig3 = go.Figure(go.Indicator(
+    dfElec = pd.DataFrame({ 'Electricity Consumption': electricity, 'Months': MONTHS[:last_month]})
+    dfWater = pd.DataFrame({ 'Water Consumption': water, 'Months': MONTHS[:last_month]})
+
+    elecBarPlot = px.bar(dfElec, x='Months', y='Electricity Consumption', title="Monthly Energy consumption in MegaJoule (MJ) in "+str(last_year), range_y =[800,1400])
+    waterBarPlot = px.bar(dfWater, x='Months', y='Water Consumption', title="Monthly Water consumption in Cubic meters in "+str(last_year))
+
+    elecBarJSON = json.dumps(elecBarPlot, cls=plotly.utils.PlotlyJSONEncoder)
+    waterBarJSON = json.dumps(waterBarPlot, cls=plotly.utils.PlotlyJSONEncoder)
+    
+    elecLast = get_values_by_year_and_type_and_comp(last_year, 'electricity', company_id)
+    waterLast = get_values_by_year_and_type_and_comp(last_year, 'water', company_id)
+
+    elecMean = statistics.mean(elecLast[:-1])
+    waterMean = statistics.mean(waterLast[:-1])
+    elecLMS = (1/(1 + np.exp(-(-(elecLast[-1]-elecMean)/elecMean)))) *100
+    waterLMS = (1/(1 + np.exp(-(-(waterLast[-1]-waterMean)/waterMean)))) *100
+
+    elecFig = go.Figure(go.Indicator(
         mode = "gauge+number",
-        value = 270,
-        number = { 'suffix': "%" },
+        value = elecLMS,
+        gauge = {'axis' : {'range': [0, 100]}},
         domain = {'x': [0, 1], 'y': [0, 1]},
         title = {'text': "Speed"}))
-    #print(df)
+    waterFig = go.Figure(go.Indicator(
+        mode = "gauge+number",
+        gauge = {'axis' : {'range': [0, 100]}},
+        value = waterLMS,
+        domain = {'x': [0, 1], 'y': [0, 1]},
+        title = {'text': "Speed"}))
     
-    elecBarJSON = json.dumps(elecBarPlot, cls=plotly.utils.PlotlyJSONEncoder)
-    graphJSON3 = json.dumps(fig3, cls=plotly.utils.PlotlyJSONEncoder)
-    #print(c)
-    return render_template('company.html', company=company, consumptions=consumptions, elecBarJSON=elecBarJSON, graphJSON3=graphJSON3)
+    elecGraphJSON3 = json.dumps(elecFig, cls=plotly.utils.PlotlyJSONEncoder)
+    waterGraphJSON3 = json.dumps(waterFig, cls=plotly.utils.PlotlyJSONEncoder)
+    return render_template('company.html', company=company, consumptions=consumptions, waterBarJSON=waterBarJSON, elecBarJSON=elecBarJSON, elecGraphJSON3=elecGraphJSON3, waterGraphJSON3=waterGraphJSON3)
 
 @app.route('/create', methods=('GET', 'POST'))
 def create():
