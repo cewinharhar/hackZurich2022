@@ -108,7 +108,7 @@ def company(company_id):
     
     elecGraphJSON3 = json.dumps(elecFig, cls=plotly.utils.PlotlyJSONEncoder)
     waterGraphJSON3 = json.dumps(waterFig, cls=plotly.utils.PlotlyJSONEncoder)
-    badgeN = round(elecLMS/33)
+    badgeN = round(elecLMS//33)
     IMAGES = ['media/energy-efficiency-a.png','media/energy-efficiency-b.png','media/energy-efficiency-c.png']
     return render_template('company.html', badge=IMAGES[badgeN], company=c, consumptions=consumptions, waterBarJSON=waterBarJSON, elecBarJSON=elecBarJSON, elecGraphJSON3=elecGraphJSON3, waterGraphJSON3=waterGraphJSON3)
 
