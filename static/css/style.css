@@ -17,4 +17,11 @@ a { text-decoration: none !important; }
     border-radius: 15px;
     box-shadow: 5px;
     margin-bottom: 5px;
+    transition: top ease 0.5s;
+}
+
+.company_row:hover {
+    border: 1px lightgreen solid;
+    background-color: #FFF8E7;
+    margin-left: -20px;
 }
