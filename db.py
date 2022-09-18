@@ -36,3 +36,27 @@ def get_last_date():
     last_year = conn.execute('SELECT DISTINCT year FROM consumptions ORDER BY year DESC').fetchone()
     last_month = conn.execute('SELECT DISTINCT month FROM consumptions where year = ? ORDER BY month DESC', (last_year['year'],)).fetchone()
     return last_month['month'], last_year['year']
+
+def get_total_mean_by_type(type):
+    conn = get_db_connection()
+    if type == 'electricity':
+        results = conn.execute("SELECT SUM(electricity)/COUNT(electricity) AS mean FROM consumptions").fetchall()
+    if type == 'water':
+        results = conn.execute("SELECT SUM(water)/COUNT(water) AS mean FROM consumptions").fetchall()
+    conn.close()
+    result = 0
+    for res in results:
+        result = res['mean']
+    return result
+
+def get_values_by_year_and_type_and_comp(year, type, company_id):
+    conn = get_db_connection()
+    if type == 'electricity':
+        results = conn.execute("SELECT electricity FROM consumptions WHERE year = ? and company_id = ?", ( year, company_id,)).fetchall()
+    if type == 'water':
+        results = conn.execute("SELECT water FROM consumptions WHERE year = ? and company_id = ?", ( year, company_id,)).fetchall()
+    conn.close()
+    result = []
+    for res in results:
+        result.append(res[type])
+    return result
