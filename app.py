@@ -3,7 +3,6 @@ import pandas as pd
 import json
 import plotly
 import plotly.express as px
-import plotly.offline as pyo
 from company import Company
 from db import *
 import plotly.graph_objects as go
