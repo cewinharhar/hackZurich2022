@@ -30,4 +30,4 @@ The data was randomly generated and that is why some of the values may seem stra
 
 ## About the goal
 
-The goal of the project was to develope a platform for companies to evaluate and compare their electricity usage and compete with other companies for the RenAG badge which shows the monthly effort (reduced electricity consumption relative to the rest of month). The main interest for companies to participate on this platform is the annual energy reduction certificate which is issued in  
+The goal of the project was to develope a platform for companies to evaluate and compare their electricity usage and compete with other companies for the RenAG badge which shows the monthly effort (reduced electricity consumption relative to the rest of month). The main interest for companies to participate on this platform is the annual energy reduction certificate which is issued in collaboration with the Swiss Energy department. This certificate is highly interesting for company image and marketing purposes. The RenAG certificate is also a motivation to participate at the <a><href 'https://www.bfe.admin.ch/bfe/de/home/das-bfe/watt-d-or.html'></a>
