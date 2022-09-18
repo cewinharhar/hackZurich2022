@@ -51,7 +51,7 @@ class Company:
         return str(self.score)
 
     def _create_summed_scores(self):
-        score_compare = 0
+        
         connection = get_db_connection()
         last_year = connection.execute('SELECT DISTINCT year FROM consumptions ORDER BY year DESC').fetchone()
         last_month = connection.execute('SELECT DISTINCT month FROM consumptions where year = ? ORDER BY month DESC', (last_year['year'],)).fetchone()
@@ -62,6 +62,7 @@ class Company:
         last_year = last_year['year']
         year = last_year
         my_score = self._my_score(str(last_year), last_month)
+        score_compare = 0
         if last_month == 1:
             prev_month = 12
             year -= 1
@@ -71,17 +72,19 @@ class Company:
             data2 = self._pull_all_values(year, prev_month, industry['id'])
             for d, d2 in zip(data, data2):
                 if self.industry == 'Pharmaceutical' and industry['industry'] == 'Pharmaceutical':
-                    score_compare += (0.75 * (float(d["electricity"]) - float(d2["electricity"])) + 0.125 * (float(d["water"]) - float(d2["water"])) + 0.125* (float(d["co2"]) - float(d2["co2"])))
+                    score_compare += (0.75 * (float(d["electricity"]) - float(d2["electricity"])) + 0.125 * (float(d["water"]) - float(d2["water"])))
                 if self.industry == 'Software & Tech Services' and industry['industry'] == 'Software & Tech Services':
-                    score_compare += (0.75 * (float(d["electricity"]) - float(d2["electricity"])) + 0.125 * (float(d["water"]) -float(d2["water"])) + 0.125* (float(d["co2"]) - float(d2["co2"])))
+                    score_compare += (0.75 * (float(d["electricity"]) - float(d2["electricity"])) + 0.125 * (float(d["water"]) -float(d2["water"])))
                 if self.industry == 'Electrical Equipment & Parts' and industry['industry'] == 'Electrical Equipment & Parts':
-                    score_compare += (0.75 * (float(d["electricity"]) - float(d2["electricity"])) + 0.125 * (float(d["water"]) -float(d2["water"])) + 0.125* (float(d["co2"]) - float(d2["co2"])))
+                    score_compare += (0.75 * (float(d["electricity"]) - float(d2["electricity"])) + 0.125 * (float(d["water"]) -float(d2["water"])))
                 if self.industry == 'Retail' and industry['industry'] == 'Retail':
-                    score_compare += (0.75 * (float(d["electricity"]) - float(d2["electricity"])) + 0.125 * (float(d["water"]) -float(d2["water"])) + 0.125* (float(d["co2"]) - float(d2["co2"])))
+                    score_compare += (0.75 * (float(d["electricity"]) - float(d2["electricity"])) + 0.125 * (float(d["water"]) -float(d2["water"])))
                 if self.industry == 'Insurance' and industry['industry'] == 'Insurance':
-                    score_compare += (0.75 * (float(d["electricity"]) - float(d2["electricity"])) + 0.125 * (float(d["water"]) -float(d2["water"])) + 0.125* (float(d["co2"]) - float(d2["co2"])))
+                    score_compare += (0.75 * (float(d["electricity"]) - float(d2["electricity"])) + 0.125 * (float(d["water"]) -float(d2["water"])))
+                
         score_compare = score_compare/2
         final_score = int((my_score/score_compare)*100)
+        connection.close()
         return final_score
 
     def _pull_all_values(self, year, month, id):
@@ -101,9 +104,6 @@ class Company:
         return data
 
     def _my_score(self, year, month):
-
         prev_month, prev_elec, curr_month, elec = get_values(self.data, year, month)
         prev_month, prev_water, curr_month, water = get_values(self.data, year, month, type = "water")
-        prev_month, prev_co2, curr_month, co2 = get_values(self.data, year, month, type = "co2")
-        return (0.75 * (float(elec) - float(prev_elec)) + 0.125 * (float(water) - float(prev_water)) + 0.125 * (float(co2)- float(prev_co2)))
-    
+        return (0.75 * (float(elec) - float(prev_elec)) + 0.25 * (float(water) - float(prev_water)))
