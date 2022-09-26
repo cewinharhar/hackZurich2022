@@ -1,15 +1,33 @@
 {% extends 'base.html' %}
 
 {% block industry %}
-    <h1>{% block name %} Welcome to LeaderBoard {% endblock %}</h1>
-    {% for company in companies %}
-        <a href="{{ url_for('company', company_id=company['id']) }}">
-            <h2>{{ company['name'] }}</h2>
-        </a>
-        <span class="badge badge-primary">{{ company['created'] }}</span>
-        <a href="{{ url_for('edit', id=company['id']) }}">
-            <span class="badge badge-warning">Edit</span>
-        </a>
-        <hr>
+    <button id="btnAddMonth" type="button" class="btn btn-success" onclick="window.location.href='{{ url_for( 'add_months') }}';">Add Month</button>
+    <!--<button id="btnAddMonth" type="button" class="btn btn-warning" onclick="window.location.href='{{ url_for( 'delete_months') }}';">Delete
+    </button>-->
+    <h1>{% block name %} Welcome to Leaderboard {% endblock %}</h1>
+    <div class='row justify-content-end'>
+    <i style="margin-right: 17%; margin-bottom: 5px;">Change in energy from previous month in MJ</i>
+    </div>
+    {% for df in d %}
+        <div class='row company_row'>
+            <div class='col-3'>
+                <!--<a href="{{ url_for('edit', id=df['company']['id']) }}">
+                    <span class="badge badge-warning">Edit</span>
+                </a>-->
+                <a href="{{ url_for('company', company_id=df['company']['id']) }}">
+                    <h2 style="color: green;">{{ df['company']['name'] }}</h2>
+                </a>
+                <span class="badge badge-primary">{{ df['company']['industry'] }}</span>
+                
+            </div>
+            <div class='col-3'>
+                <b>Overall score:</b><br>
+                <span class="badge badge-info" style="font-size: 32px">{{df['company']['score']}}</span>
+            </div>
+            <div class='col-6'>
+                <div id={{ df['chart_id'] }} class='chart' style='float: right'></div>
+            </div>
+        </div>
+        <br>
     {% endfor %}
 {% endblock %}

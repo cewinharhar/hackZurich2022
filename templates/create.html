@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block industry %}
-<h1>{% block name %} Create a New Company {% endblock %}</h1>
+<h1>Create a New Company</h1>
 
 <form method="POST">
     <div class="form-group">
@@ -15,6 +15,12 @@
         <label for="industry">Industry</label>
         <textarea name="industry" placeholder="Company industry"
                   class="form-control">{{ request.form['industry'] }}</textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="summary">Summary</label>
+        <textarea name="summary" placeholder="Company summary"
+                  class="form-control">{{ request.form['summary'] }}</textarea>
     </div>
     <div class="form-group">
         <button type="submit" class="btn btn-primary">Submit</button>

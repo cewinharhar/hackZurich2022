@@ -1,7 +1,27 @@
 h1 {
-    border: 2px #eee solid;
-    color: brown;
+    font-size: 4rem !important;
+    color: #4C102A;
     text-align: center;
     padding: 10px;
 }
 
+a { text-decoration: none !important; }
+
+.bg-logo {
+    background-color: #FFF8E7!important;
+}
+
+.company_row {
+    border: 1px lightgray solid;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 5px;
+    margin-bottom: 5px;
+    transition: top ease 0.5s;
+}
+
+.company_row:hover {
+    border: 1px lightgreen solid;
+    background-color: #FFF8E7;
+    margin-left: -20px;
+}
